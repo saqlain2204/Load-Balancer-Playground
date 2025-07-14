@@ -12,17 +12,7 @@ This project demonstrates how a load balancer distributes traffic across multipl
 
 ## Architecture
 
-```
-                   ┌─────────┐
-                   │ Browser │
-                   └────┬────┘
-                        │
-                        ▼
-┌───────────┐     ┌──────────┐     ┌─────────┐
-│ Frontend  │◄────┤  HAProxy │◄────┤ Backend │
-│ (Nginx)   │     │          │     │ Servers │
-└───────────┘     └──────────┘     └─────────┘
-```
+![Load Balancer Architecture](assets/media/Load-balancer.png)
 
 ## Getting Started
 
@@ -40,12 +30,17 @@ This project demonstrates how a load balancer distributes traffic across multipl
 
 2. Start all services
    ```
-   docker-compose up -d
+   docker compose up --build
    ```
 
 3. Access the visualization UI
    ```
    http://localhost:3000
+   ```
+
+4. To stop and remove all containers
+   ```
+   docker compose down
    ```
 
 ## How It Works
@@ -88,3 +83,4 @@ backend servers
 ## License
 
 MIT
+
