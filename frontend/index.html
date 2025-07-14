@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Load Balancer Visualizer</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .server { padding: 15px; margin: 10px 0; border-radius: 5px; transition: all 0.3s; }
+        .active { background-color: #4CAF50; color: white; transform: scale(1.05); }
+        #response { margin-top: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        button { padding: 10px 15px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>HAProxy Load Balancer Visualizer</h1>
+    
+    <div id="servers">
+        <div id="server1" class="server">Server 1 (app1)</div>
+        <div id="server2" class="server">Server 2 (app2)</div>
+        <div id="server3" class="server">Server 3 (app3)</div>
+        <div id="server4" class="server">Server 4 (app4)</div>
+    </div>
+    
+    <button id="sendRequest">Send Request</button>
+    
+    <div id="response">
+        <h3>Response:</h3>
+        <pre id="responseData"></pre>
+    </div>
+
+    <script>
+        document.getElementById('sendRequest').addEventListener('click', async () => {
+            // Reset active state
+            document.querySelectorAll('.server').forEach(s => s.classList.remove('active'));
+            
+            try {
+                const response = await fetch('http://localhost:8080/');
+                const data = await response.json();
+                
+                // Display response
+                document.getElementById('responseData').textContent = JSON.stringify(data, null, 2);
+                
+                // Highlight the active server
+                const serverNum = data.Server.replace('server', '');
+                document.getElementById(`server${serverNum}`).classList.add('active');
+            } catch (error) {
+                document.getElementById('responseData').textContent = `Error: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>

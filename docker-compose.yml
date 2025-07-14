@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  app1:
+    build: ./server1
+    container_name: app1
+    expose:
+      - "8000"
+
+  app2:
+    build: ./server2
+    container_name: app2
+    expose:
+      - "8000"
+
+  app3:
+    build: ./server3
+    container_name: app3
+    expose:
+      - "8000"
+    
+  app4:
+    build: ./server4
+    container_name: app4
+    expose:
+      - "8000"
+
+  haproxy:
+    image: haproxy:latest
+    container_name: haproxy
+    ports:
+      - "8080:80"  # HAProxy exposes TCP to host
+    volumes:
+      - ./haproxy:/usr/local/etc/haproxy
+    depends_on:
+      - app1
+      - app2
+      - app3
+      - app4
+
+  frontend:
+    image: nginx:alpine
+    container_name: frontend
+    ports:
+      - "3000:80"  # Frontend on localhost:3000
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    depends_on:
+      - haproxy
